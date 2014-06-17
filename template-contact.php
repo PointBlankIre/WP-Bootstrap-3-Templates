@@ -24,11 +24,11 @@ Template Name: Contact page
 
 	 
 		 
-		      		 
+		      		<h4>Contact us</h4>
 		     
-    		 <div id="result"></div>
+    		 
       			 
-                    
+
       					<fieldset id="contact_form">
 						
 						
@@ -45,14 +45,22 @@ Template Name: Contact page
 						  
 						    
 						    <label for="message"><span>Message</span> </label>
-						    <textarea name="message" id="message" placeholder="Enter Your Message" class="form-control"></textarea>
+						    <textarea name="message" id="message" placeholder="Enter Your Name" class="form-control"></textarea>
 						   
 						    
 						   
 						    <button class="submit_btn btn btn-default" id="submit_btn">Submit</button>
 						   
 						</fieldset>
-                
+
+                        <div id="success">
+
+                            <h4> Thanks. Your Mail has been sent.</h4>
+
+
+
+                        </div>
+
 	
       	
         
@@ -76,10 +84,8 @@ Template Name: Contact page
 
   </div>
    <div class="col-md-7">
-             <div class="map-frame">
-                    <iframe src="http://mapsengine.google.com/map/view?mid=zZt0lMBYWWmc.k_ouHS2dQgNs" ></iframe>  
-            </div> 
-</div>
+  
+<iframe src="https://mapsengine.google.com/map/embed?mid=zZt0lMBYWWmc.k_ouHS2dQgNs" width="666" height="680"></iframe>  </div>
 </div>
 
 <?php get_footer(); ?>
@@ -93,7 +99,7 @@ jQuery(document).ready(function() {
         var user_email      = jQuery('input[name=email]').val();
         //var user_phone      = jQuery('input[name=phone]').val();
         var user_message    = jQuery('textarea[name=message]').val();
-        var user_subject    = "Enquiry";
+        var user_subject    = "Oreillysfineart.com Enquiry";
         
         //simple validation at client's end
         //we simply change border color to red if empty field using .css()
@@ -119,11 +125,12 @@ jQuery(document).ready(function() {
         if(proceed) 
         {
             //data to be sent to server
-            post_data = {'userName':user_name, 'userEmail':user_email,  'userMessage':user_message,
+            post_data = {action: 'pb_send_mail','userName':user_name, 'userEmail':user_email,  'userMessage':user_message,
          					'userSubject':user_subject};
             
             //Ajax post data to server
-            jQuery.post('<?php bloginfo('url'); ?>/contact_me.php', post_data, function(response){  
+            jQuery.post('/wp-admin/admin-ajax.php', post_data, function(response){  
+           // jQuery.post('/contact-us', post_data, function(response){  
                 
                 //load json data from server and output message     
                 if(response.type == 'error')
@@ -133,16 +140,15 @@ jQuery(document).ready(function() {
                 
                     output = '<div class="success">'+response.text+'</div>';
                     
+                     jQuery('#contact_form').hide(); 
+
                     //reset values in all input fields
                     jQuery('#contact_form input').val(''); 
                     jQuery('#contact_form textarea').val(''); 
                     jQuery("#collapseOne").collapse('hide');
-                    jQuery("#contact_form").fadeOut('slow');
                 }
                 
                 jQuery("#result").hide().html(output).slideDown();
-
-
             }, 'json');
             
         }
@@ -163,3 +169,4 @@ jQuery(document).ready(function() {
     
 });
 </script>
+?>
